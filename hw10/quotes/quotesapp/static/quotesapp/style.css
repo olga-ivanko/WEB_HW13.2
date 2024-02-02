@@ -23,3 +23,8 @@
 em {
     font-style: italic;
 }
+
+.tag-list li {
+  display: inline-block;
+  margin-right: 5px;
+}

@@ -1,19 +1,25 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import TagForm, AuthorForm, QuoteForm
 from .models import Tag, Author, Quote
+from collections import Counter
 
 from django.core.paginator import Paginator
 
-# Create your views here.
+
 def main(request):
     quote_list = Quote.objects.all()
-    paginator = Paginator(quote_list, 10)
 
+    tag_counter = Counter()
+    for quote in quote_list:
+        for tag in quote.tags.all():
+            tag_counter[tag.name] += 1
+    top_ten_tags = tag_counter.most_common(10)
+    
+    paginator = Paginator(quote_list, 10)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-
-    return render(request, "quotesapp/index.html", {"page_obj": page_obj})
+    return render(request, "quotesapp/index.html", {"page_obj": page_obj, "top_ten_tags": top_ten_tags})
 
 
 def tag(request):
@@ -78,3 +84,8 @@ def tags_list(request, tag_name):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     return render(request, "quotesapp/tags_list.html", {"page_obj": page_obj, "tag_name": tag_name})
+
+
+
+
+    

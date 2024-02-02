@@ -1,46 +1,56 @@
-{% extends "quotesapp/base.html" %}{% load extract_tags %} {% block content %}
+{% extends "quotesapp/base.html" %}
+{% load extract_tags %} 
+{% block content %}
 
 <nav style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px">
   {% if user.is_authenticated %}
-
   <ul>
     <li>
-      <a href="{% url 'quotesapp:quote' %}" role="button">Add new quote</a>
+      <a href="{% url "quotesapp:quote" %}" role="button">Add new quote</a>
     </li>
     <li>
-      <a href="{% url 'quotesapp:author' %}" role="button">Add new author</a>
+      <a href="{% url "quotesapp:author" %}" role="button">Add new author</a>
     </li>
   </ul>
   <ul>
     <li>Welcome <b>{{ user.username }}!</b></li>
-    <li><a href="{% url 'users:logout' %}" role="button">Logout</a></li>
+    <li><a href="{% url "users:logout" %}" role="button">Logout</a></li>
   </ul>
   {% else %}
   <ul>
-    <li><a href="{% url 'users:signup' %}" role="button">Sign Up</a></li>
-    <li><a href="{% url 'users:login' %}" role="button">Login</a></li>
+    <li><a href="{% url "users:signup" %}" role="button">Sign Up</a></li>
+    <li><a href="{% url "users:login" %}" role="button">Login</a></li>
   </ul>
   {% endif %}
 </nav>
-{% for quote in page_obj %}
 
-<span><em>{{ quote.quote }}</em></span>
-<p>
-  <b>by: <kbd>{{ quote.author }}</kbd></b>
-  <a style="color: red;" href="{% url 'quotesapp:about_author' author_name=quote.author.fullname %}"
-    > (about)</a>
-</p>
-<p>Tags:
-  {% for tag in quote.tags.all %}
-    <a href="{% url 'quotesapp:tags_list' tag_name=tag.name %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+<div>
+  <h3>Top 10 tags:</h3>
+</div>
+<ul>
+  {% for tag, count in top_ten_tags %}
+    <ul><a href="{% url "quotesapp:tags_list" tag_name=tag %}">{{ tag }} ({{count}})</a></ul>
   {% endfor %}
-</p>
+</ul>
 
-{% endfor %} {% if page_obj.has_other_pages %}
+{% for quote in page_obj %}
+  <span><em>{{ quote.quote }}</em></span>
+  <p>
+    <b>by: <kbd>{{ quote.author }}</kbd></b>
+    <a style="color: red;" href="{% url "quotesapp:about_author" author_name=quote.author.fullname %}">(about)</a>
+  </p>
+  <p>Tags:
+    {% for tag in quote.tags.all %}
+      <a href="{% url "quotesapp:tags_list" tag_name=tag.name %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+  </p>
+{% endfor %}
+
+{% if page_obj.has_other_pages %}
 <div class="pagination">
   {% if page_obj.has_previous %}
-  <a href="?page=1">&laquo; First </a>
-  <a href="?page={{ page_obj.previous_page_number }}">Previous </a>
+    <a href="?page=1">&laquo; First </a>
+    <a href="?page={{ page_obj.previous_page_number }}">Previous </a>
   {% endif %}
 
   <span class="current">
@@ -48,8 +58,9 @@
   </span>
 
   {% if page_obj.has_next %}
-  <a href="?page={{ page_obj.next_page_number }}"> Next</a>
-  <a href="?page={{ page_obj.paginator.num_pages }}"> Last &raquo;</a>
+    <a href="?page={{ page_obj.next_page_number }}"> Next</a>
+    <a href="?page={{ page_obj.paginator.num_pages }}"> Last &raquo;</a>
   {% endif %}
 </div>
-{% endif %} {% endblock %}
+{% endif %}
+{% endblock %}
