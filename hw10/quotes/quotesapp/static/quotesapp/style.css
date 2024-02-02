@@ -5,3 +5,17 @@
 .alert-success {
     color: green;
 }
+
+.pagination {
+    margin-top: 20px;
+}
+
+.pagination a {
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.pagination .current {
+    font-weight: bold;
+    margin: 0 5px;
+}

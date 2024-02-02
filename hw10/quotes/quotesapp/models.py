@@ -21,7 +21,7 @@ class Tag(models.Model):
 
 
 class Quote(models.Model):
-    author = models.ForeignObject(Author, on_delete=models.CASCADE)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
     quote = models.TextField(null=False, blank=False, unique=True)
     tags = models.ManyToManyField(Tag)
 

@@ -1,13 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Organizer</title>
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"/>
-</head>
-<body>
-<main class="container">
-    <h1>Best quotes</h1>
-</main>
-</body>
-</html>
+{% extends "quotesapp/base.html" %}{% load extract_tags %} {% block content %}
+{% for quote in page_obj %}
+<b>{{ quote.quote }}</b>
+<p>
+  <b>by: <kbd>{{ quote.author }}</kbd></b>
+  <a href="{% url 'quotesapp:about_author' author_name=quote.author.fullname %}">(about)</a>
+</p>
+<p>Tags: <b>{{ quote.tags|tags }}</b></p>
+{% endfor %} {% if page_obj.has_other_pages %}
+<div class="pagination">
+  {% if page_obj.has_previous %}
+  <a href="?page=1">&laquo; First </a>
+  <a href="?page={{ page_obj.previous_page_number }}">Previous </a>
+  {% endif %}
+
+  <span class="current">
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+  </span>
+
+  {% if page_obj.has_next %}
+  <a href="?page={{ page_obj.next_page_number }}"> Next</a>
+  <a href="?page={{ page_obj.paginator.num_pages }}"> Last &raquo;</a>
+  {% endif %}
+</div>
+{% endif %} {% endblock %}
