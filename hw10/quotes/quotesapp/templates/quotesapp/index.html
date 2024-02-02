@@ -1,4 +1,22 @@
 {% extends "quotesapp/base.html" %}{% load extract_tags %} {% block content %}
+
+<nav style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px">
+    {% if user.is_authenticated %}
+    <ul>
+        <li><a href="{% url 'quotesapp:quote' %}" role="button">Add new quote</a></li>
+        <li><a href="{% url 'quotesapp:author' %}" role="button">Add new author</a></li>
+    </ul>
+    <ul>
+        <li>Welcome <b>{{ user.username }}!</b></li>
+        <li><a href="{% url 'users:logout' %}" role="button">Logout</a></li>
+    </ul>
+    {% else %}
+    <ul>
+        <li><a href="{% url 'users:signup' %}" role="button">Sign Up</a></li>
+        <li><a href="{% url 'users:login' %}" role="button">Login</a></li>
+    </ul>
+    {% endif %}
+</nav>
 {% for quote in page_obj %}
 <b>{{ quote.quote }}</b>
 <p>

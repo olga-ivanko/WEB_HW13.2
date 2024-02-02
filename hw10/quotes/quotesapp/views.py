@@ -35,28 +35,31 @@ def author(request):
             form.save()
             return redirect(to="quotesapp:main")
         else:
-            return render(request, "quotesapp/author.html", {"form": form})
+            return render(request, "quotesapp/n_author.html", {"form": form})
 
-    return render(request, "quotesapp/author.html", {"form": AuthorForm()})
+    return render(request, "quotesapp/n_author.html", {"form": AuthorForm()})
 
 
 def quote(request):
     tags = Tag.objects.all()
-
     if request.method == "POST":
         form = QuoteForm(request.POST)
         if form.is_valid():
-            quote = form.save()
-
-            choice_tags = Tag.objects.filter(name__in=request.POST.getlist("tags"))
-            for tag in choice_tags.iterator():
-                quote.tags.add(tag)
-
-                return redirect(to="quotesapp.main")
+            quote = form.save(commit=False)
+            author_name = form.cleaned_data["author"]
+            author = get_object_or_404(Author, fullname=author_name)
+            quote.author = author
+            quote.save()
+            chosen_tags = form.cleaned_data["tags"]
+            quote.tags.set(chosen_tags)
+            return redirect(to="quotesapp:main")
         else:
-            return render(request, "quotesapp/quote.html", {"tags": tags, "form": form})
-
-    return render(request, "quotesapp/quote.html", {"tags": tags, "form": QuoteForm()})
+            return render(
+                request, "quotesapp/n_quote.html", {"tags": tags, "form": form}
+            )
+    return render(
+        request, "quotesapp/n_quote.html", {"tags": tags, "form": QuoteForm()}
+    )
 
 
 def about_author(request, author_name):
