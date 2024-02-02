@@ -19,3 +19,7 @@
     font-weight: bold;
     margin: 0 5px;
 }
+
+em {
+    font-style: italic;
+}

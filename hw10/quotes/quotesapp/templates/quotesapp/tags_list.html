@@ -1,5 +1,7 @@
-{% extends "quotesapp/base.html" %}{% load extract_tags %} {% block content %}
+{% extends "quotesapp/base.html" %}
+{% load extract_tags %}
 
+{% block content %}
 <nav style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px">
   {% if user.is_authenticated %}
 
@@ -22,21 +24,20 @@
   </ul>
   {% endif %}
 </nav>
-{% for quote in page_obj %}
 
-<span><em>{{ quote.quote }}</em></span>
+<h3>Viewing tag: <em><span style="color: red;">{{tag_name}}</span></em></h3>
 <p>
-  <b>by: <kbd>{{ quote.author }}</kbd></b>
-  <a style="color: red;" href="{% url 'quotesapp:about_author' author_name=quote.author.fullname %}"
-    > (about)</a>
-</p>
-<p>Tags:
-  {% for tag in quote.tags.all %}
-    <a href="{% url 'quotesapp:tags_list' tag_name=tag.name %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
-  {% endfor %}
-</p>
+{% for quote in page_obj %}
+<p></p>
+  <span><em>{{ quote.quote }}</em></span> 
+  <p><b>by: <kbd>{{ quote.author }}</kbd></b>
+  <a href="{% url 'quotesapp:about_author' author_name=quote.author.fullname %}"
+    >(about)</a>
+<ul>Tags: <b>{{ quote.tags|tags }}</b></ul>
+</p></p>
+{% endfor %}
 
-{% endfor %} {% if page_obj.has_other_pages %}
+{% if page_obj.has_other_pages %}
 <div class="pagination">
   {% if page_obj.has_previous %}
   <a href="?page=1">&laquo; First </a>
@@ -52,4 +53,5 @@
   <a href="?page={{ page_obj.paginator.num_pages }}"> Last &raquo;</a>
   {% endif %}
 </div>
-{% endif %} {% endblock %}
+{% endif %}
+{% endblock %}

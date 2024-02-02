@@ -70,3 +70,11 @@ def about_author(request, author_name):
 def quote_detail(request, quote_id):
     quote = get_object_or_404(Quote, id=quote_id)
     return render(request, "quotesapp/quote.html", {"quote": quote})
+
+
+def tags_list(request, tag_name):
+    quotes_with_tag = Quote.objects.filter(tags__name__in=[tag_name])
+    paginator = Paginator(quotes_with_tag, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(request, "quotesapp/tags_list.html", {"page_obj": page_obj, "tag_name": tag_name})
