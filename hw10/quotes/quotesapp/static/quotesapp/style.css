@@ -24,7 +24,14 @@ em {
     font-style: italic;
 }
 
-.tag-list li {
-  display: inline-block;
-  margin-right: 5px;
+section {
+    float: right; 
+    width: 20%; 
+    margin-right: 20px; 
+}
+
+.container::after {
+    content: "";
+    display: table;
+    clear: both;
 }

@@ -23,16 +23,16 @@
   </ul>
   {% endif %}
 </nav>
-
+<section>
 <div>
   <h3>Top 10 tags:</h3>
 </div>
 <ul>
   {% for tag, count in top_ten_tags %}
-    <ul><a href="{% url "quotesapp:tags_list" tag_name=tag %}">{{ tag }} ({{count}})</a></ul>
+    <li><a href="{% url "quotesapp:tags_list" tag_name=tag %}">{{ tag }} ({{count}})</a></li>
   {% endfor %}
 </ul>
-
+</section>
 {% for quote in page_obj %}
   <span><em>{{ quote.quote }}</em></span>
   <p>
