@@ -12,6 +12,7 @@ psycopg2 = "^2.9.9"
 pymongo = "^4.6.1"
 mongoengine = "^0.27.0"
 pillow = "^10.2.0"
+django-environ = "^0.11.2"
 
 
 [build-system]
